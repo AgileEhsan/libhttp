@@ -47,6 +47,7 @@ LIBHTTP_API char *lh_ip_to_ipt( const char *in, struct lh_ip_t *out ) {
 	bool dig[4];
 	unsigned int val[8];
 	const char *p_src;
+	signed int double_loc, a, step, num_cflon;
 
 	if ( in == NULL  ||  out == NULL ) return NULL;
 
@@ -79,8 +80,6 @@ LIBHTTP_API char *lh_ip_to_ipt( const char *in, struct lh_ip_t *out ) {
 
 			p_src++;
 		}
-
-#####
 	}
 
 
@@ -105,7 +104,11 @@ LIBHTTP_API char *lh_ip_to_ipt( const char *in, struct lh_ip_t *out ) {
 		while ( *p_src != '\0'  &&  block < 4 ) {
 
 			if ( *p_src == '.' ) block++;
-			else { dig[block] = true; val[block] *= 10; val[block] += *p_scr - '0'; }
+			else {
+					dig[block] = true; 
+					val[block] *= 10;
+					val[block] += *p_src - '0';
+			}
 
 			p_src++;
 		}
@@ -145,7 +148,7 @@ LIBHTTP_API char *lh_ip_to_ipt( const char *in, struct lh_ip_t *out ) {
 	 * bracket exists.
 	 */
 
-	if ( *p_src = '[' ) { bracket = true; p_src++; }
+	if ( *p_src == '[' ) { bracket = true; p_src++; }
 	else                  bracket = false;
 
 	/*
@@ -212,7 +215,7 @@ LIBHTTP_API char *lh_ip_to_ipt( const char *in, struct lh_ip_t *out ) {
 
 		if ( double_loc < 0 ) return NULL;
 
-		stap = 7-num_colon;
+		step = 7-num_cflon;
 
 		for (a=7; a>8-num_colon+double_loc; a--) val[a]              = val[a-step];
 		for (a=0; a<8-num_colon;            a++) val[a+double_loc+1] = 0;
